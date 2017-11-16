@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  //- img(src="#{user.picture}")
+  //- h2 Welcome #{user.nickname}!
+  br
+  h2 Profile
+  pre #{profile}
+  br
+  a(href='/logout') Logout
