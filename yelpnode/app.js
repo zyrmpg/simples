@@ -1,23 +1,100 @@
+'use strict';
+
+const Yelp = require('node-yelp-fusion');
+
 require('dotenv').config();
-const request = require('superagent');
-//get access token with api creds
-console.log(process.env.FUSION_CLIENT_ID)
-request
-    .post('https://api.yelp.com/oauth2/token')
-    .send("grant_type=client_credentials")
-    .send("client_id="+process.env.FUSION_CLIENT_ID)
-    .send("client_secret="+process.env.FUSION_CLIENT_SECRET)
-    .set('accept', 'json')
-    .end((err, response) => {
-    // Calling the end function will send the request
-        console.log(response.body.access_token)
+const clientId = process.env.FUSION_CLIENT_ID;
+const clientSecret = process.env.FUSION_CLIENT_SECRET;
+
+var yelp = new Yelp({ id: clientId, secret: clientSecret });
+
+yelp.search("term=burgers&location=arcadia,ca")
+    .then(function (result) {
+        console.log(result);
+    }, function (error) {
+        console.log(error);
     });
 
-/*request
-.post('/api/pet')
-.send({ name: 'Manny', species: 'cat' }) // sends a JSON post body
-.set('X-API-Key', 'foobar')
-.set('accept', 'json')
-.end((err, res) => {
-  // Calling the end function will send the request
-});*/
+
+
+
+/*
+const yelp = require('yelp-fusion');
+
+require('dotenv').config();
+const clientId = process.env.FUSION_CLIENT_ID;
+const clientSecret = process.env.FUSION_CLIENT_SECRET + 'asd';
+
+const token = yelp.accessToken(clientId, clientSecret).then(response => {
+    //console.log(response.jsonBody.access_token);
+    return response.jsonBody.access_token;
+}).catch(e => {
+    console.log(e);
+    return e;
+});
+
+const client = yelp.client(token);
+
+client.search({
+    term: 'Tea Station',
+    location: 'Temple City, ca'
+}).then(response => {
+    console.log(response.jsonBody.buisnesses[0].name);
+}).catch(e => {
+    console.log(e);
+});
+
+client.phoneSearch({
+    phone: '+16269621598'
+}).then(response => {
+    console.log(response.jsonBody.businesses[0].name);
+}).catch(e => {
+    console.log(e);
+});
+
+client.transactionSearch('delivery', {
+    location: 'san diego'
+}).then(response => {
+    console.log(response.jsonBody.businesses[0].name);
+}).catch(e => {
+    console.log(e);
+});
+
+
+client.business('gary-danko-san-francisco').then(response => {
+    console.log(response.jsonBody.name);
+  }).catch(e => {
+    console.log(e);
+  });
+
+
+client.reviews('gary-danko-san-francisco').then(response => {
+    console.log(response.jsonBody.reviews[0].text);
+  }).catch(e => {
+    console.log(e);
+  });
+
+
+client.autocomplete({
+    text:'pizza'
+  }).then(response => {
+    console.log(response.jsonBody.terms[0].text);
+  }).catch(e => {
+    console.log(e);
+  });
+
+
+// matchType can be 'lookup' or 'best'
+client.businessMatch('lookup', {
+    name: 'Pannikin Coffee & Tea',
+    address1: '510 N Coast Hwy 101',
+    address2: 'Encinitas, CA 92024',
+    city: 'Encinitas',
+    state: 'CA',
+    country: 'US'
+  }).then(response => {
+    console.log(response.jsonBody.businesses[0].id);
+  }).catch(e => {
+    console.log(e);
+  });
+  */
